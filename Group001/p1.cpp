@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 #include <gtest/gtest.h>
 
@@ -98,7 +99,33 @@ public:
      */
     int lengthOfLongestSubstring(string s)
     {
+        int count(0);
+        int max(0);
+        std::map<char, std::string::iterator> table;
 
+        for (auto start = s.begin(), iter = s.begin(); iter != s.end(); ++iter) {
+            auto ch = table.find(*iter);
+
+            if (ch != table.end() && ch->second >= start) {
+                max = count > max ? count : max;
+                start = ch->second + 1;
+                count = iter - start + 1;
+            } else {
+                ++count;
+            }
+
+            table[*iter] = iter;
+        }
+
+        return count > max ? count : max;
+    }
+
+    /**
+     * 4. 寻找两个有序数组的中位数
+     */
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
+    {
+        
     }
 };
 
@@ -130,6 +157,14 @@ TEST(p1, addTwoNumbers)
 }
 
 TEST(p1, lengthOfLongestSubstring)
+{
+    ASSERT_EQ(3, Solution().lengthOfLongestSubstring("abcabcbb"));
+    ASSERT_EQ(1, Solution().lengthOfLongestSubstring("bbbbb"));
+    ASSERT_EQ(3, Solution().lengthOfLongestSubstring("pwwkew"));
+    ASSERT_EQ(3, Solution().lengthOfLongestSubstring("ohomm"));
+}
+
+TEST(p1, findMedianSortedArrays)
 {
 
 }
